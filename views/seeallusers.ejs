@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Users</title>
+</head>
+<body>
+    <h1>All Users</h1>
+    
+    <!-- Table to display users -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through the users array and render each user's info -->
+            <% users.forEach(user => { %>
+                <tr>
+                    <td><%= user.name %></td>
+                    <td><%= user.email %></td>
+                    <td>
+                        <!-- Form to delete user -->
+                        <form action="/deleteuser/<%= user._id %>?_method=DELETE" method="POST" style="display:inline;">
+                            <button type="submit" style="color: red;">Delete</button>
+                        </form>
+                        <!-- Form to update user -->
+                        <form action="/updateuser/<%= user._id %>?" method="get" style="display:inline;">
+                            <button type="submit" style="color: red;">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

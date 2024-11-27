@@ -24,6 +24,8 @@ app.use(express.urlencoded({ extended: true }));  // For form data (application/
 app.use(express.json());  // For JSON data (application/json)
 
 
+//method-override
+app.use(require("method-override")("_method"))
 
 
 
@@ -48,6 +50,7 @@ async function main(){
 
 //stiching homeroute
 require("./routes/login.routes")(app)
+require("./routes/admin.routes")(app)
 
 //connection with server
 app.listen(server_config.PORT,()=>{
