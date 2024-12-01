@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bookings</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        button.approve {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button.reject {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>View Bookings</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Purpose</th>
+                <th>Hall</th>
+                <th>User</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% bookings.forEach(booking => { %>
+            <tr>
+                <td><%= booking.info %></td>
+                <td><%= booking.hallId.name %></td>
+                <td><%= booking.userId.name  %></td>
+                <td><%= booking.userId.email %></td>
+                <td><%= booking.date.toISOString().split('T')[0] %></td>
+                <td><%= booking.startTime %></td>
+                <td><%= booking.endTime %></td>
+                <td><%= booking.status %></td>
+                <td>
+                    <form action="/submit" method="POST" style="display:inline;">
+                        <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                        <button type="submit" name="action" value="approve" class="approve">Approve</button>
+                    </form>
+                    <form action="/submit" method="POST" style="display:inline;">
+                        <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                        <button type="submit" name="action" value="reject" class="reject">Reject</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</body>
+</html>

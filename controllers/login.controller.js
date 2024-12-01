@@ -19,6 +19,7 @@ exports.home =async (req, res) => {
         let user=await listingModel.findOne({email:email,password:password});
 
         if(user){
+            req.session.userId = user._id;  // Store the userId in the session
             if(user.role=="admin"){
                 return res.render("admin_dashboard");
             }else{

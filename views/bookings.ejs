@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Hall Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .hall-card {
+            width: 250px;
+            height: auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .hall-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .hall-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .hall-details {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .availability {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: green; /* Default for available */
+        }
+
+        .availability.booked {
+            color: red;
+        }
+
+        .view-details-btn {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .view-details-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <% halls.forEach(hall => { %>
+        <div class="hall-card">
+            <div class="hall-name"><%= hall.name %></div>
+            <div class="hall-details">Seating Capacity: <%= hall.capacity %></div>
+            <div class="availability <%= hall.available ? '' : 'booked' %>">
+                <%= hall.available ? 'Available' : 'Booked' %>
+            </div>
+            <button class="view-details-btn">View Details</button>
+        </div>
+        <% }) %>
+    </div>
+
+</body>
+</html>

@@ -27,7 +27,16 @@ app.use(express.json());  // For JSON data (application/json)
 //method-override
 app.use(require("method-override")("_method"))
 
+const session = require('express-session');
 
+
+//session
+// Express session middleware
+app.use(session({
+    secret: 'yourSecretKey',  // Secret key for encrypting session data
+    resave: false,            // Don't save session if unmodified
+    saveUninitialized: true,  // Save a session even if it hasn't been modified
+}));
 
 
 
@@ -51,6 +60,7 @@ async function main(){
 //stiching homeroute
 require("./routes/login.routes")(app)
 require("./routes/admin.routes")(app)
+require("./routes/booking.routes")(app)
 
 //connection with server
 app.listen(server_config.PORT,()=>{

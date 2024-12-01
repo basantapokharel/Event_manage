@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Bookings</title>
+    <style>
+        .booking-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .booking-header {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+        .booking-details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Bookings</h1>
+
+    <% if (bookings.length > 0) { %>
+        <% bookings.forEach(booking => { %>
+            <div class="booking-container">
+                <div class="booking-header">
+                    <span>Hall Name: <%= booking.hallId.name %></span>
+                    <span>Status: <%= booking.status %></span>
+                </div>
+                <div class="booking-details">
+                    <p>Purpose: <%= booking.info %></p>
+                    <p>Date: <%= booking.date.toISOString().split("T")[0] %></p>
+                    <p>Time: <%= booking.startTime %> - <%= booking.endTime %></p>
+                </div>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <p>No bookings found.</p>
+    <% } %>
+</body>
+</html>
