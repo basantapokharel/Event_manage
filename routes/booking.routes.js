@@ -12,4 +12,6 @@ module.exports=(app) =>{
 
     app.get("/viewallbookings",bookingController.viewallbookings);
     app.post("/submit",bookingController.submit);
+
+    app.get('/api/bookings', bookingController.getAllBookings);
 }

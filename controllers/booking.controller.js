@@ -45,14 +45,11 @@ exports.getBookings = async (req, res) => {
         console.log("Hall ID:", hallId);
         console.log("Date:", date);
 
-        if (!hallId || !date) {
-            return res.status(400).send("Hall ID and date are required");
-        }
-
         // Convert the date from string (YYYY-MM-DD) to Date object
-        const startOfDay = new Date(date); // Start of the day at 00:00:00
-        const endOfDay = new Date(date);   // End of the day at 23:59:59
-
+        const startOfDay = new Date(date); // match the str of date in db
+        const endOfDay = new Date(date);   
+        console.log("Start of the day:", startOfDay);
+        console.log("End of the day:", endOfDay);
         // Set the time for start and end of the day
         startOfDay.setHours(0, 0, 0, 0);  // 00:00:00
         endOfDay.setHours(23, 59, 59, 999); // 23:59:59.999
@@ -148,3 +145,28 @@ exports.submit = async (req, res) => {
         res.status(500).send("Error accepting or rejecting booking");
     }
 }
+
+exports.getAllBookings = async (req, res) => {
+    try {
+        const bookings = await bookingModel
+            .find({})
+            .populate('hallId', 'name') // Populate hall name
+            .populate('userId', 'name email'); // Populate user details
+
+        // Format bookings for FullCalendar
+        const formattedBookings = bookings.map(booking => ({
+            id: booking._id,
+            title: `${booking.info} (By: ${booking.userId.name})`,
+            start: `${booking.date.toISOString().split('T')[0]}T${booking.startTime}`,
+            end: `${booking.date.toISOString().split('T')[0]}T${booking.endTime}`,
+            description: `Hall: ${booking.hallId.name}, Email: ${booking.userId.email}`,
+            color: booking.status === "approved" ? "#4CAF50" : "#f44336" // Example: green for approved, red for others
+        }));
+
+        res.status(200).json(formattedBookings);
+    } catch (error) {
+        console.error("Error fetching bookings for API:", error);
+        res.status(500).json({ error: "Failed to fetch bookings" });
+    }
+};
+
