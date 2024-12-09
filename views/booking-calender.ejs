@@ -106,8 +106,9 @@
         <select id="roomSelect">
             <option value="" disabled selected>Select a hall</option>
             <% halls.forEach(hall=> { %>
-                <option value="<%= hall._id %>" data-capacity="<%= hall.capacity %>">
-                    <%= hall.name %>
+                <option value="<%= hall._id %>" data-capacity="<%= hall.capacity %>" <% if (typeof selectedHallId
+                    !=='undefined' && hall._id.toString()===selectedHallId) { %> selected <% } %> >
+                        <%= hall.name %>
                 </option>
                 <% }); %>
         </select>
@@ -153,13 +154,21 @@
             const endTimeInput = document.getElementById("endTime");
             const bookingInfoInput = document.getElementById("bookingInfo");
             const capacityInput = document.getElementById("capacity");
-            
+
             const endTimeError = document.getElementById("endTimeError");
             const submitButton = document.getElementById("submitButton");
 
             let selectedHall = null;
             let selectedDate = null;
             let existingBookings = [];
+
+            //Function to update the capacity input based on selected hall
+            function updateCapacity() {
+                const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+                const hallCapacity = selectedOption.getAttribute("data-capacity");
+                capacityInput.setAttribute("max", hallCapacity);
+                capacityInput.placeholder = `Max capacity: ${hallCapacity}`;
+            }
 
             function toggleInputs(enable) {
                 const inputs = [startTimeInput, endTimeInput, bookingInfoInput, capacityInput];
@@ -206,7 +215,7 @@
                 const endTime = endTimeInput.value;
                 console.log("startTime", startTime);
                 console.log("endTime", endTime);
-                
+
                 endTimeError.textContent = "";
 
                 if (!startTime || !endTime) {
@@ -238,15 +247,12 @@
                 }
             }
 
+
             roomSelect.addEventListener("change", (e) => {
-                console.log(e);
                 selectedHall = e.target.value;
-                // Get the capacity of the selected hall
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const hallCapacity = selectedOption.getAttribute("data-capacity");
-                capacityInput.setAttribute("max", hallCapacity);
-                capacityInput.placeholder = `Max capacity: ${hallCapacity}`;
-                fetchBookings();
+                console.log("Hall selected:", e.target.value);
+                updateCapacity(); // Update capacity when the hall is changed
+                fetchBookings(); // Fetch bookings based on the selected hall
             });
 
             datePicker.addEventListener("change", (e) => {
@@ -264,7 +270,69 @@
 
             startTimeInput.addEventListener("change", validateTimeSlot);
             endTimeInput.addEventListener("change", validateTimeSlot);
+
+            if (roomSelect.value) {
+                selectedHall = roomSelect.value;
+                console.log("Hall selected:", roomSelect.value);
+                updateCapacity(); // Update capacity when the hall is changed
+                fetchBookings(); // Fetch bookings based on the selected hall
+            }
+
+
+
+            // Submit button logic for booking
+            submitButton.addEventListener("click", () => {
+                const startTime = startTimeInput.value;
+                const endTime = endTimeInput.value;
+                const bookingInfo = bookingInfoInput.value;
+                const capacity = capacityInput.value;
+
+                // Check if booking info and capacity are entered
+                if (!bookingInfo || !capacity) {
+                    alert("Please enter all required details: booking info and capacity.");
+                    return; // Prevent form submission if not filled
+                }
+
+                // Prepare the data to send in the booking request
+                const bookingData = {
+                    hallId: selectedHall,
+                    date: selectedDate,
+                    startTime: startTime,
+                    endTime: endTime,
+                    info: bookingInfo,
+                    capacity: capacity
+                };
+
+                // Send the booking request to the server
+                fetch("/book", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(bookingData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        
+                        roomSelect.value = "";
+                        datePicker.value = "";
+                        startTimeInput.value = "";
+                        endTimeInput.value = "";
+                        bookingInfoInput.value = "";
+                        capacityInput.value = "";
+
+                        window.location.href = "/viewuserBookings";
+                    }
+                    )
+                    .catch(err => {
+                        console.error("Error booking hall:", err);
+                        alert("An error occurred while booking the hall.");
+                    });
+            });
+
         });
+
+
 
 
 

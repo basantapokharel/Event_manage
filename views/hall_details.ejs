@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall Details - Hall Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hall-details-container {
+            width: 80%;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .hall-header {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .hall-info {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #555;
+        }
+
+        .booking-status {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: green;
+        }
+
+        .booking-status.booked {
+            color: red;
+        }
+
+        .back-btn {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .book-now-btn {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .book-now-btn:hover {
+            background-color: #218838;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hall-details-container">
+        <div class="hall-header">
+            <%= hall.name %> - Hall Details
+        </div>
+
+        <div class="hall-info">
+            <strong>Seating Capacity:</strong> <%= hall.capacity %><br>
+            <strong>Description:</strong> <%= hall.description || "No description available." %><br>
+        </div>
+
+        <div class="booking-status <%= hall.available ? '' : 'booked' %>">
+            <%= hall.available ? 'Available' : 'Booked' %>
+        </div>
+
+        <!-- Book Now Button -->
+        <form action="/book-now-hall/<%= hall._id %>" method="GET">
+            <button class="book-now-btn" type="submit">Book Now</button>
+        </form>
+        <br>
+        
+
+        <!-- Back Button -->
+        <button class="back-btn" onclick="window.history.back()">Go Back</button>
+
+        
+    </div>
+
+</body>
+</html>

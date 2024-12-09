@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +19,9 @@
             font-weight: bold;
         }
 
-        select, input, button {
+        select,
+        input,
+        button {
             margin: 10px 0;
             padding: 8px;
             width: 100%;
@@ -28,7 +31,8 @@
         #slotsContainer {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;  /* Space between the slots */
+            gap: 10px;
+            /* Space between the slots */
             justify-content: center;
             margin-top: 20px;
         }
@@ -46,14 +50,16 @@
 
         .slot:hover {
             background-color: #ddd;
-            transform: scale(1.05);  /* Slightly enlarge on hover */
+            transform: scale(1.05);
+            /* Slightly enlarge on hover */
         }
 
         .slot.selected {
             background-color: #4CAF50;
             color: white;
             border-color: #388E3C;
-            transform: scale(1.1);  /* Enlarge the selected slot slightly */
+            transform: scale(1.1);
+            /* Enlarge the selected slot slightly */
         }
 
         .no-slots {
@@ -79,6 +85,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Booking Calendar</h1>
 
@@ -88,11 +95,11 @@
         <select id="roomSelect">
             <option value="" disabled selected>Select a room</option>
             <!-- Rooms will be dynamically populated -->
-            <% halls.forEach(hall => { %>
+            <% halls.forEach(hall=> { %>
                 <option value="<%= hall._id %>">
                     <%= hall.name %>
                 </option>
-            <% }); %>
+                <% }); %>
         </select>
     </div>
 
@@ -102,7 +109,7 @@
         <input type="text" id="infoInput" name="info" placeholder="Enter purpose of booking" required>
     </div>
 
-    
+
 
     <!-- Date Picker -->
     <div>
@@ -121,17 +128,17 @@
         <input type="hidden" name="info" id="info">
         <button id="bookNow" type="submit" disabled>Book Now</button>
     </form>
-    
+
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-             // Hidden inputs
-    const hallIdInput = document.getElementById("hallId");
-    const dateInput = document.getElementById("date");
-    const startTimeInput = document.getElementById("startTime");
-    const endTimeInput = document.getElementById("endTime");
-    const hiddeninfoInput = document.getElementById("info");
-    const bookinginfoInput= document.getElementById("infoInput");
+            // Hidden inputs
+            const hallIdInput = document.getElementById("hallId");
+            const dateInput = document.getElementById("date");
+            const startTimeInput = document.getElementById("startTime");
+            const endTimeInput = document.getElementById("endTime");
+            const hiddeninfoInput = document.getElementById("info");
+            const bookinginfoInput = document.getElementById("infoInput");
 
             const roomSelect = document.getElementById("roomSelect");
             const datePicker = document.getElementById("datePicker");
@@ -148,7 +155,7 @@
             let selectedHall = null;
             let selectedDate = null;
 
-            
+
 
             // Event listener for hall selection
             roomSelect.addEventListener("change", (e) => {
@@ -192,34 +199,34 @@
                         const slotElement = document.createElement("div");
                         slotElement.className = "slot";
                         slotElement.textContent = `${slot}`;
-                        
+
                         // Add click event listener to toggle selection
                         slotElement.addEventListener("click", function () {
                             if (bookinginfoInput.value.trim() !== "") {
-                                    // Enable the 'Book Now' button if the input is not empty
-                                        hiddeninfoInput.value = bookinginfoInput.value;
-                                        bookNowButton.disabled = false;
-                                    }
-                            
-                            
+                                // Enable the 'Book Now' button if the input is not empty
+                                hiddeninfoInput.value = bookinginfoInput.value;
+                                bookNowButton.disabled = false;
+                            }
+
+
                             const previouslySelected = slotsContainer.querySelector(".selected");
                             if (previouslySelected) {
                                 previouslySelected.classList.remove("selected");
                             }
                             slotElement.classList.add("selected");
-                             // Populate hidden inputs for form submission
-                             const [startTime, endTime] = slot.split(" - ");
+                            // Populate hidden inputs for form submission
+                            const [startTime, endTime] = slot.split(" - ");
                             hallIdInput.value = selectedHall;
                             dateInput.value = selectedDate;
                             startTimeInput.value = startTime;
                             endTimeInput.value = endTime;
-                            
+
 
 
                         });
 
                         slotsContainer.appendChild(slotElement);
-                        
+
                     });
 
 
@@ -235,20 +242,65 @@
 
             // Event listener for the "Purpose of Booking" input field
             bookinginfoInput.addEventListener("input", function () {
-           // Update hidden input and check if the form can be submitted
-        if ((bookinginfoInput.value.trim() !== "") && (slotsContainer.querySelector(".selected") !== null) ) {
-            hiddeninfoInput.value = bookinginfoInput.value;
-            bookNowButton.disabled = false;
-        }
+                // Update hidden input and check if the form can be submitted
+                if ((bookinginfoInput.value.trim() !== "") && (slotsContainer.querySelector(".selected") !== null)) {
+                    hiddeninfoInput.value = bookinginfoInput.value;
+                    bookNowButton.disabled = false;
+                }
+
+
+            });
+
+            // Submit button logic for booking
+            submitButton.addEventListener("click", () => {
+                const startTime = startTimeInput.value;
+                const endTime = endTimeInput.value;
+                const bookingInfo = bookingInfoInput.value;
+                const capacity = capacityInput.value;
+
+                // Prepare the data to send in the booking request
+                const bookingData = {
+                    hallId: selectedHall,
+                    date: selectedDate,
+                    startTime: startTime,
+                    endTime: endTime,
+                    info: bookingInfo,
+                    capacity: capacity
+                };
+
+                // Send the booking request to the server
+                fetch("/book", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(bookingData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // If booking is successful, reroute to /viewuserBookings
+                            window.location.href = "/viewuserBookings";
+                        } else {
+                            // Handle any errors that occurred during booking
+                            alert("Booking failed. Please try again.");
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error booking hall:", err);
+                        alert("An error occurred while booking the hall.");
+                    });
+            });
 
 
         });
 
 
 
-        });
+
 
 
     </script>
 </body>
+
 </html>

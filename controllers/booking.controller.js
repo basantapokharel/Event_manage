@@ -1,17 +1,29 @@
 const hallModel= require("../models/halls.model")
 const bookingModel= require("../models/bookings.model")
 
-exports.bookings =async (req, res) => {
+exports.hall_bookings =async (req, res) => {
 
     try{
         let halls= await hallModel.find({});
-        res.render("bookings",{halls});
+        res.render("hall_bookings",{halls});
 
     }
     catch(err){ 
         res.status(500).send("Error rendering bookings page");
     }
 
+}
+
+exports.hall_details =async (req, res) => {
+
+    try{
+        const id=req.params.id;
+        const hall= await hallModel.findById(id);
+        res.render("hall_details",{hall});
+    }
+    catch(err){ 
+        res.status(500).send("Error rendering hall_details page");
+    }
 }
 
 exports.viewuserBookings =async (req, res) => {
@@ -37,6 +49,19 @@ exports.booknow = async (req, res) => {
         res.status(500).send("Error rendering booking calendar");
     }
 };
+exports.booknowhall = async (req, res) => {
+    try {
+        const hallId=req.params.hallId;
+        const halls = await hallModel.find();
+        
+        res.render('booking-calender', { halls, selectedHallId: hallId });
+
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).send("Error rendering booking calendar");
+    }
+}
 
 exports.getBookings = async (req, res) => {
     try {
@@ -74,13 +99,14 @@ exports.getBookings = async (req, res) => {
 
 exports.book = async (req, res) => {
     try{
-        const {hallId,date,startTime,endTime,info}=req.body;
+        const {hallId,date,startTime,endTime,info,capacity}=req.body;
         console.log("hallId:",hallId);
         console.log("date:",date);
         console.log("startTime:",startTime);
         console.log("endTime:",endTime);
         console.log("user_id",req.session.userId);
         console.log("info:",info);
+        console.log("capacity:",capacity);
 
         // Create a new booking
         const newBooking = new bookingModel({
@@ -89,12 +115,14 @@ exports.book = async (req, res) => {
             userId: req.session.userId,
             date,
             startTime,
-            endTime
+            endTime,
+            capacity
         });
 
         await bookingModel.create(newBooking);
         // Send a success response
-        res.status(201).json({ message: "Booking successful!", booking: newBooking });
+        console.log("Booking successful!");
+        res.status(201).json({ message: "Booking successful!"});
     }
     catch(err){
         console.log("Error in booking",err);
@@ -110,7 +138,7 @@ exports.viewallbookings = async (req, res) => {
             .populate('hallId', 'name') // Populate hall name from the 'halls' collection
             .populate('userId', 'name email'); // Populate user name and email from the 'users' collection
         console.log("Bookings:", bookings);
-       res.render("view-bookings", { bookings });
+       res.render("view-bookings", { bookings,isAdmin:true});
     } catch (err) {
         res.status(500).send("Error rendering view-bookings page");
     }
@@ -128,12 +156,24 @@ exports.submit = async (req, res) => {
         if (action === "approve") {
             booking.status = "booked";
             await booking.save();
-            res.status(200).send("Booking approved successfully.");
+            const bookings = await bookingModel
+            .find({})
+            .populate('hallId', 'name') // Populate hall name from the 'halls' collection
+            .populate('userId', 'name email'); // Populate user name and email from the 'users' collection
+
+            console.log("Booking approved successfully.");
+            res.render("view-bookings", { bookings,isAdmin:true });
         } else if (action === "reject") {
             booking.status = "cancelled";
             await booking.deleteOne(); // Deletes the booking from the database
+
+            const bookings = await bookingModel
+            .find({})
+            .populate('hallId', 'name') // Populate hall name from the 'halls' collection
+            .populate('userId', 'name email'); // Populate user name and email from the 'users' collection
+
             console.log("Booking deleted successfully.");
-            res.status(200).send("Booking rejected and removed successfully.");
+            res.render("view-bookings", { bookings,isAdmin:true });
 
 
         }
@@ -142,31 +182,21 @@ exports.submit = async (req, res) => {
 
     }
     catch(err){ 
+        console.log(err);
         res.status(500).send("Error accepting or rejecting booking");
     }
 }
 
-exports.getAllBookings = async (req, res) => {
+exports.viewallbookingsuser = async (req, res) => {
     try {
         const bookings = await bookingModel
             .find({})
-            .populate('hallId', 'name') // Populate hall name
-            .populate('userId', 'name email'); // Populate user details
-
-        // Format bookings for FullCalendar
-        const formattedBookings = bookings.map(booking => ({
-            id: booking._id,
-            title: `${booking.info} (By: ${booking.userId.name})`,
-            start: `${booking.date.toISOString().split('T')[0]}T${booking.startTime}`,
-            end: `${booking.date.toISOString().split('T')[0]}T${booking.endTime}`,
-            description: `Hall: ${booking.hallId.name}, Email: ${booking.userId.email}`,
-            color: booking.status === "approved" ? "#4CAF50" : "#f44336" // Example: green for approved, red for others
-        }));
-
-        res.status(200).json(formattedBookings);
-    } catch (error) {
-        console.error("Error fetching bookings for API:", error);
-        res.status(500).json({ error: "Failed to fetch bookings" });
+            .populate('hallId', 'name') // Populate hall name from the 'halls' collection
+            .populate('userId', 'name email'); // Populate user name and email from the 'users' collection
+        
+       res.render("view-bookings", { bookings,isAdmin:false});
+    } catch (err) {
+        res.status(500).send("Error rendering view-bookings page");
     }
 };
 
