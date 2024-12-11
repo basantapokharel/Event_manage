@@ -25,11 +25,11 @@
                     <td><%= user.email %></td>
                     <td>
                         <!-- Form to delete user -->
-                        <form action="/deleteuser/<%= user._id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <form action="/deleteuser/<%= user.id %>?_method=DELETE" method="POST" style="display:inline;">
                             <button type="submit" style="color: red;">Delete</button>
                         </form>
                         <!-- Form to update user -->
-                        <form action="/updateuser/<%= user._id %>?" method="get" style="display:inline;">
+                        <form action="/updateuser/<%= user.id %>?" method="get" style="display:inline;">
                             <button type="submit" style="color: red;">Update</button>
                         </form>
                     </td>

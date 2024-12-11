@@ -16,25 +16,39 @@ exports.index =async (req, res) =>{
 exports.home =async (req, res) => {
     try{
         let {email,password}=req.body;
-        let user=await listingModel.findOne({email:email,password:password});
+        // Query Firestore for a user with the provided email
+        const usersRef = db.collection('users');
+        // console.log("usersRef",usersRef);
 
-        if(user){
-            req.session.userId = user._id;  // Store the userId in the session
-            if(user.role=="admin"){
+        const snapshot = await usersRef.where('email', '==', email).get();
+        
+        if (snapshot.empty) {
+            // User not found
+            return res.render("login", { message: "User not found"});
+        }
+
+        const userDoc=snapshot.docs[0].data();
+
+        // check password
+        if(userDoc.password === password){
+            userId=snapshot.docs[0].id;
+            console.log(userId);
+            req.session.userId = userId;  // Store the userId in the session
+
+            if(userDoc.role=="admin"){
                 return res.render("admin_dashboard");
             }else{
                 return res.render("user_dashboard");
             }
-        }else{
-            // User not found
-            return res.render("login", { message: "User not found"});
+        } else {
+            // Password does not match
+            return res.render("login", { message: "Incorrect password"});
         }
+
     }
     catch(err){
         console.log(err);
         return res.status(500).send("Error logging in");
     }
-
-
-
+        
 }

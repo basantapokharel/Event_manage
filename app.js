@@ -32,7 +32,6 @@ app.use(require("method-override")("_method"))
 
 const session = require('express-session');
 
-
 //session
 // Express session middleware
 app.use(session({
@@ -41,21 +40,11 @@ app.use(session({
     saveUninitialized: true,  // Save a session even if it hasn't been modified
 }));
 
+//firebase
+const db=require("./configs/firebase.config");
 
 
-//connection with mongodb
-main()
-.then(()=>{
-    console.log("Connected to Database")
 
-}).catch((err)=>{
-    console.log(err);
-})
-
-
-async function main(){
-    await mongoose.connect(db_config.DB_URL)
-}
 
 
 

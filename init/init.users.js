@@ -1,28 +1,33 @@
-const mongoose=require('mongoose')
- 
-const listingModel = require("../models/users.model")
+
 const data=require("./users")
+const db=require("../configs/firebase.config")
 
-const db_config=require("../configs/db.config")
 
+// Initialize Firestore
+const initDB = async () => {
+  try {
+    const collectionRef = db.collection("users");
 
-//connection with mongodb
-main()
-.then(()=>{
-    console.log("Connected to Database")
+    // Delete all existing documents
+    const snapshot = await collectionRef.get();
+    const deletePromises = snapshot.docs.map((doc) => doc.ref.delete());
+    await Promise.all(deletePromises);
 
-}).catch((err)=>{
-    console.log(err);
-})
+    // Insert new data
+    const insertPromises = data.users.map(async(user) =>
+    {
+      docRef= await collectionRef.add(user);
+    //   const docId = docRef.id; 
+    //   console.log(docId);
 
-const initDB=async()=>{
-    await listingModel.deleteMany({});
-    await listingModel.insertMany(data.users)
-    console.log("Data was initialized");
-}
+    });
+    await Promise.all(insertPromises);
 
-async function main(){
-    await mongoose.connect(db_config.DB_URL)
-}
+    console.log("Data was initialized in Firestore.");
+  } catch (error) {
+    console.error("Error initializing Firestore data:", error);
+  }
+};
 
+// Call the function to initialize the database
 initDB();

@@ -72,7 +72,7 @@
                             <td><%= booking.userId.name %></td>
                             <td><%= booking.userId.email %></td>
                             <td><%= booking.info %></td>
-                            <td><%= booking.date.toISOString().split('T')[0] %></td>
+                            <td><%= booking.date %></td>
                             <td><%= booking.startTime %></td>
                             <td><%= booking.endTime %></td>
                             <td><%= booking.capacity %></td>
@@ -82,14 +82,14 @@
                                     <% if (booking.status !== 'booked') { %>
                                         <!-- Approve Button -->
                                         <form action="/submit" method="POST" style="display: inline;">
-                                            <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                                            <input type="hidden" name="bookingId" value="<%= booking.id %>">
                                             <input type="hidden" name="action" value="approve">
                                             <button type="submit" class="btn btn-approve">Approve</button>
                                         </form>
 
                                         <!-- Reject Button -->
                                         <form action="/submit" method="POST" style="display: inline;">
-                                            <input type="hidden" name="bookingId" value="<%= booking._id %>">
+                                            <input type="hidden" name="bookingId" value="<%= booking.id %>">
                                             <input type="hidden" name="action" value="reject">
                                             <button type="submit" class="btn btn-reject">Reject</button>
                                         </form>

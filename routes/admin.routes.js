@@ -8,5 +8,6 @@ module.exports=(app) =>{
     app.delete("/deleteuser/:id",adminController.deleteuser);
     app.get("/updateuser/:id",adminController.updateuser);
     app.put("/updateuser/:id",adminController.updateuser);
+    app.get("/seeallhalls",adminController.seeallhalls);
     
 }

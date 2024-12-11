@@ -106,8 +106,8 @@
         <select id="roomSelect">
             <option value="" disabled selected>Select a hall</option>
             <% halls.forEach(hall=> { %>
-                <option value="<%= hall._id %>" data-capacity="<%= hall.capacity %>" <% if (typeof selectedHallId
-                    !=='undefined' && hall._id.toString()===selectedHallId) { %> selected <% } %> >
+                <option value="<%= hall.id %>" data-capacity="<%= hall.capacity %>" <% if (typeof selectedHallId
+                    !=='undefined' && hall.id.toString()===selectedHallId) { %> selected <% } %> >
                         <%= hall.name %>
                 </option>
                 <% }); %>
