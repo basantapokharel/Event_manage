@@ -4,43 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Bookings</title>
-    <style>
-        .booking-container {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px 0;
-        }
-        .booking-header {
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-        }
-        .booking-details {
-            margin-top: 10px;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Your Bookings</h1>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center py-8">
+    <h1 class="text-3xl font-bold mb-6 text-blue-600">Your Bookings</h1>
 
-    <% if (bookings.length > 0) { %>
-        <% bookings.forEach(booking => { %>
-            <div class="booking-container">
-                <div class="booking-header">
-                    <span>Hall Name: <%= booking.hallId.name %></span>
-                    <span>Status: <%= booking.status %></span>
+    <div class="w-11/12 md:w-3/4 lg:w-1/2">
+        <% if (bookings.length > 0) { %>
+            <% bookings.forEach(booking => { %>
+                <div class="bg-white shadow-md rounded-lg p-6 mb-4">
+                    <div class="flex justify-between items-center border-b pb-3 mb-3">
+                        <h2 class="text-lg font-semibold text-gray-700">Hall Name: <%= booking.hallId.name %></h2>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium <% if (booking.status === 'Confirmed') { %>bg-green-100 text-green-600<% } else if (booking.status === 'Pending') { %>bg-yellow-100 text-yellow-600<% } else { %>bg-red-100 text-red-600<% } %>">
+                            <%= booking.status %>
+                        </span>
+                    </div>
+                    <div class="text-gray-600">
+                        <p class="mb-2"><span class="font-semibold">Purpose:</span> <%= booking.info %></p>
+                        <p class="mb-2"><span class="font-semibold">Date:</span> <%= booking.date %></p>
+                        <p class="mb-2"><span class="font-semibold">Time:</span> <%= booking.startTime %> - <%= booking.endTime %></p>
+                    </div>
                 </div>
-                <div class="booking-details">
-                    <p>Purpose: <%= booking.info %></p>
-                    <p>Date: <%= booking.date %></p>
-                    <p>Time: <%= booking.startTime %> - <%= booking.endTime %></p>
-                </div>
-            </div>
-        <% }); %>
-    <% } else { %>
-        <p>No bookings found.</p>
-    <% } %>
+            <% }); %>
+        <% } else { %>
+            <p class="text-center text-gray-600 bg-white shadow-md rounded-lg p-6">No bookings found.</p>
+        <% } %>
+    </div>
+
 </body>
 </html>

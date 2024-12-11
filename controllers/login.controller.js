@@ -32,13 +32,14 @@ exports.home =async (req, res) => {
         // check password
         if(userDoc.password === password){
             userId=snapshot.docs[0].id;
+            const userName = userDoc.name;
             console.log(userId);
             req.session.userId = userId;  // Store the userId in the session
 
             if(userDoc.role=="admin"){
                 return res.render("admin_dashboard");
             }else{
-                return res.render("user_dashboard");
+                return res.render("user_dashboard",{userName});
             }
         } else {
             // Password does not match

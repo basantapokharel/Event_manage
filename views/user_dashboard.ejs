@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - Hall Management</title>
     <link rel="stylesheet" href="/css/user_dash.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 <body>
     <header class="navbar">
         <h1>Hall Management System</h1>
         <nav>
-            <a href="/profile">Profile</a>
-            <a href="/logout">Logout</a>
+            <a href="/">Logout</a>
         </nav>
     </header>
     <div class="dashboard-container">
-        <h2>Welcome, User</h2>
+        <h2>Welcome, <%= userName %>!</h2>
         <p>Select an action below:</p>
         <div class="options">
             <a href="/hall_bookings">

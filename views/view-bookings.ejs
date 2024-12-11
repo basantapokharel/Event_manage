@@ -4,109 +4,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View All Bookings</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        table {
-            width: 100%;
-            margin: 20px 0;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        .btn {
-            padding: 5px 10px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn-approve {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-reject {
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
 </head>
-<body>
-    <div class="container">
-        <h1>All Bookings</h1>
+<body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">All Bookings</h1>
 
-        <table border="1" cellpadding="10" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Hall Name</th>
-                    <th>User Name</th>
-                    <th>User Email</th>
-                    <th>Booking Info</th>
-                    <th>Date</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                    <th>Capacity</th>
-                    <th>Status</th>
-                    <% if (isAdmin) { %>
-                        <th>Actions</th>
-                    <% } %>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (bookings.length > 0) { %>
-                    <% bookings.forEach((booking, index) => { %>
-                        <tr>
-                            <td><%= index + 1 %></td>
-                            <td><%= booking.hallId.name %></td>
-                            <td><%= booking.userId.name %></td>
-                            <td><%= booking.userId.email %></td>
-                            <td><%= booking.info %></td>
-                            <td><%= booking.date %></td>
-                            <td><%= booking.startTime %></td>
-                            <td><%= booking.endTime %></td>
-                            <td><%= booking.capacity %></td>
-                            <td><%= booking.status %></td>
-                            <% if (isAdmin) { %>
-                                <td>
-                                    <% if (booking.status !== 'booked') { %>
-                                        <!-- Approve Button -->
-                                        <form action="/submit" method="POST" style="display: inline;">
-                                            <input type="hidden" name="bookingId" value="<%= booking.id %>">
-                                            <input type="hidden" name="action" value="approve">
-                                            <button type="submit" class="btn btn-approve">Approve</button>
-                                        </form>
-
-                                        <!-- Reject Button -->
-                                        <form action="/submit" method="POST" style="display: inline;">
-                                            <input type="hidden" name="bookingId" value="<%= booking.id %>">
-                                            <input type="hidden" name="action" value="reject">
-                                            <button type="submit" class="btn btn-reject">Reject</button>
-                                        </form>
+        <div class="overflow-x-auto shadow-lg rounded-lg">
+            <table class="table-auto w-full bg-white border-collapse rounded-lg">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="px-4 py-2">#</th>
+                        <th class="px-4 py-2">Hall Name</th>
+                        <th class="px-4 py-2">User Name</th>
+                        <th class="px-4 py-2">User Email</th>
+                        <th class="px-4 py-2">Booking Info</th>
+                        <th class="px-4 py-2">Date</th>
+                        <th class="px-4 py-2">Start Time</th>
+                        <th class="px-4 py-2">End Time</th>
+                        <th class="px-4 py-2">Capacity</th>
+                        <th class="px-4 py-2">Status</th>
+                        <% if (isAdmin) { %>
+                            <th class="px-4 py-2">Actions</th>
+                        <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (bookings.length > 0) { %>
+                        <% bookings.forEach((booking, index) => { %>
+                            <tr class="even:bg-gray-100 odd:bg-white border-b">
+                                <td class="px-4 py-2 text-center"><%= index + 1 %></td>
+                                <td class="px-4 py-2"><%= booking.hallId.name %></td>
+                                <td class="px-4 py-2"><%= booking.userId.name %></td>
+                                <td class="px-4 py-2"><%= booking.userId.email %></td>
+                                <td class="px-4 py-2"><%= booking.info %></td>
+                                <td class="px-4 py-2"><%= booking.date %></td>
+                                <td class="px-4 py-2"><%= booking.startTime %></td>
+                                <td class="px-4 py-2"><%= booking.endTime %></td>
+                                <td class="px-4 py-2"><%= booking.capacity %></td>
+                                <td class="px-4 py-2">
+                                    <% if (booking.status === 'booked') { %>
+                                        <span class="text-green-600 font-semibold">Approved</span>
                                     <% } else { %>
-                                        <span>Approved</span>
+                                        <span class="text-yellow-500 font-semibold"><%= booking.status %></span>
                                     <% } %>
                                 </td>
-                            <% } %>
+                                <% if (isAdmin) { %>
+                                    <td class="px-4 py-2 text-center">
+                                        <% if (booking.status !== 'booked') { %>
+                                            <!-- Approve Button -->
+                                            <form action="/submit" method="POST" class="inline">
+                                                <input type="hidden" name="bookingId" value="<%= booking.id %>">
+                                                <input type="hidden" name="action" value="approve">
+                                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md">Approve</button>
+                                            </form>
+
+                                            <!-- Reject Button -->
+                                            <form action="/submit" method="POST" class="inline">
+                                                <input type="hidden" name="bookingId" value="<%= booking.id %>">
+                                                <input type="hidden" name="action" value="reject">
+                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md">Reject</button>
+                                            </form>
+                                        <% } else { %>
+                                            <span class="text-gray-500">No Actions</span>
+                                        <% } %>
+                                    </td>
+                                <% } %>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="<%= isAdmin ? 11 : 10 %>" class="px-4 py-2 text-center text-gray-500">No bookings available.</td>
                         </tr>
-                    <% }); %>
-                <% } else { %>
-                    <tr>
-                        <td colspan="<%= isAdmin ? 11 : 10 %>">No bookings available.</td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 </html>

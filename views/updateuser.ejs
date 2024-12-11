@@ -3,33 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update User</title>
+    <title>Update User - Hall Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Update User</h1>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
+            <h1 class="text-2xl font-bold text-center mb-6 text-gray-800">Update User</h1>
 
-    <!-- Form for updating user -->
-    <form action="/updateuser/<%= user.id %>?_method=PUT" method="POST">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" value="<%= user.name %>" required><br><br>
-        
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="<%= user.email %>" required>
-        <% if (typeof message !== 'undefined') { %>
-            <span style="color: red; margin-left: 10px;"><%= message %></span>
-        <% } %>
-        <br><br>
+            <!-- Form for updating user -->
+            <form action="/updateuser/<%= user.id %>?_method=PUT" method="POST" class="space-y-6">
+                <!-- Name Input -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name:</label>
+                    <input type="text" id="name" name="name" value="<%= user.name %>" required 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter new password" required><br><br>
+                <!-- Email Input -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
+                    <input type="email" id="email" name="email" value="<%= user.email %>" required 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <% if (typeof message !== 'undefined') { %>
+                        <span class="text-sm text-red-500"><%= message %></span>
+                    <% } %>
+                </div>
 
-        <label for="role">Role:</label>
-        <select id="role" name="role" required>
-            <option value="user" <%= user.role === "user" ? "selected" : "" %>>User</option>
-            <option value="admin" <%= user.role === "admin" ? "selected" : "" %>>Admin</option>
-        </select><br><br>
+                <!-- Password Input -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password:</label>
+                    <input type="password" id="password" name="password" placeholder="Enter new password" required 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                </div>
 
-        <button type="submit">Update</button>
-    </form>
+                <!-- Role Selection -->
+                <div>
+                    <label for="role" class="block text-sm font-medium text-gray-700">Role:</label>
+                    <select id="role" name="role" required 
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="user" <%= user.role === "user" ? "selected" : "" %>>User</option>
+                        <option value="admin" <%= user.role === "admin" ? "selected" : "" %>>Admin</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" 
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

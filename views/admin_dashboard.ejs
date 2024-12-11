@@ -3,14 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Dashboard - Hall Management</title>
+    <link rel="stylesheet" href="/css/admin_dash.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <b>This is admin dashboard.</b>
-    <br>
-    <a href="/seeallusers">See all users</a>
-    <a href="/addnewuser">Add new user</a>
-    <a href="/viewallbookings">View all bookings</a>
-    
+    <header class="navbar bg-blue-600 text-white p-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Hall Management System</h1>
+        <nav>
+            <a href="/profile" class="text-white hover:text-gray-200 mx-2">Profile</a>
+            <a href="/logout" class="text-white hover:text-gray-200 mx-2">Logout</a>
+        </nav>
+    </header>
+    <div class="dashboard-container max-w-5xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
+        <h2 class="text-3xl font-bold text-center mb-4">Welcome, Admin!</h2>
+        <p class="text-center text-gray-600 mb-8">Select an action below to manage the system:</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="/seeallusers">
+                <div class="option-card p-4 border rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 text-center">
+                    <i class="icon fas fa-users text-4xl text-blue-600 mb-2"></i>
+                    <div class="option-title font-bold text-lg">See All Users</div>
+                </div>
+            </a>
+            <a href="/addnewuser">
+                <div class="option-card p-4 border rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 text-center">
+                    <i class="icon fas fa-user-plus text-4xl text-green-600 mb-2"></i>
+                    <div class="option-title font-bold text-lg">Add New User</div>
+                </div>
+            </a>
+            <a href="/viewallbookings">
+                <div class="option-card p-4 border rounded-lg shadow-md hover:shadow-lg hover:bg-blue-50 text-center">
+                    <i class="icon fas fa-calendar-alt text-4xl text-purple-600 mb-2"></i>
+                    <div class="option-title font-bold text-lg">View All Bookings</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <footer class="bg-gray-800 text-white p-4 text-center">
+        <p>&copy; 2024 Hall Management System | All Rights Reserved</p>
+    </footer>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>

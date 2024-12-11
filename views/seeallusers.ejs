@@ -4,38 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>All Users</h1>
-    
-    <!-- Table to display users -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Loop through the users array and render each user's info -->
-            <% users.forEach(user => { %>
-                <tr>
-                    <td><%= user.name %></td>
-                    <td><%= user.email %></td>
-                    <td>
-                        <!-- Form to delete user -->
-                        <form action="/deleteuser/<%= user.id %>?_method=DELETE" method="POST" style="display:inline;">
-                            <button type="submit" style="color: red;">Delete</button>
-                        </form>
-                        <!-- Form to update user -->
-                        <form action="/updateuser/<%= user.id %>?" method="get" style="display:inline;">
-                            <button type="submit" style="color: red;">Update</button>
-                        </form>
-                    </td>
-                </tr>
-            <% }) %>
-        </tbody>
-    </table>
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <header class="bg-blue-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">All Users</h1>
+            <nav>
+                <a href="/dashboard" class="text-white hover:text-gray-200">Back to Dashboard</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">User List</h2>
+
+            <!-- Table to display users -->
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full border-collapse border border-gray-300">
+                    <thead class="bg-blue-100">
+                        <tr>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Name</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left">Email</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop through the users array and render each user's info -->
+                        <% users.forEach(user => { %>
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-4 py-2"><%= user.name %></td>
+                                <td class="border border-gray-300 px-4 py-2"><%= user.email %></td>
+                                <td class="border border-gray-300 px-4 py-2 text-center">
+                                    <div class="flex justify-center space-x-4">
+                                        <!-- Form to delete user -->
+                                        <form action="/deleteuser/<%= user.id %>?_method=DELETE" method="POST">
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded">Delete</button>
+                                        </form>
+                                        <!-- Form to update user -->
+                                        <form action="/updateuser/<%= user.id %>" method="GET">
+                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded">Update</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Hall Management System | All Rights Reserved</p>
+        </div>
+    </footer>
 </body>
 </html>
