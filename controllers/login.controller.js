@@ -1,5 +1,3 @@
-//users model
-const listingModel = require("../models/users.model")
 
 //index route
 exports.index =async (req, res) =>{
@@ -52,4 +50,20 @@ exports.home =async (req, res) => {
         return res.status(500).send("Error logging in");
     }
         
+}
+
+exports.logout =async (req, res) => {
+    try{
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).send('Error destroying session');
+            }
+            res.redirect('/');
+        });
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).send("Error logging out");
+    }
 }

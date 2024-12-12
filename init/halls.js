@@ -18,7 +18,7 @@ const halls = [
         description: "A large hall for conferences and seminars.",
         capacity: 200,
         image: "",
-        available: false
+        available: true
     },
     {
         name: "Hall 4",

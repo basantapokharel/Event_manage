@@ -1,5 +1,4 @@
-//users model
-const listingModel = require("../models/users.model")
+
 
 exports.seeallusers =async (req, res) =>{
     try {
@@ -117,7 +116,120 @@ exports.seeallhalls =async (req, res) => {
         }));
         console.log(halls);
         
+        res.render("seeallhalls", { halls });
+        
       } catch (err) {
         res.status(500).send("Error rendering login page");
       }
-}   
+} 
+
+
+exports.addnewhall = async (req, res) => {
+    if (req.method === "GET") {
+        try {
+            res.render("addnewhall"); 
+          } catch (err) {
+            res.status(500).send("Error adding new user");
+          }
+    }
+
+    else if (req.method === "POST") {
+        try {
+            const { name, description, capacity, image, available } = req.body;
+            const newHall = {
+                name: name,
+                description: description,
+                capacity: parseInt(capacity),
+                image: image || "",
+                available: available === 'true', // Convert to boolean
+            };
+            // Add new hall to Firestore
+            const hallRef = await db.collection('halls').add(newHall);
+
+            // Redirect to the halls listing page
+            return res.redirect("/seeallhalls");
+
+    }
+    catch(err){
+        return res.status(500).send("Error adding new hall");
+    }
+    }
+}
+
+exports.deletehall = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // Delete the user document from Firestore        
+        await db.collection("halls").doc(id).delete();
+
+        // Redirect to the halls listing page
+        return res.redirect("/seeallhalls");
+    } catch (err) {
+        console.error("Error deleting user:", err);
+        return res.status(500).send("Error deleting user");
+    }
+};
+
+exports.updatehall = async (req, res) => {
+    if (req.method === "GET") {
+        try {
+            const { id } = req.params;
+
+            // Fetch the hall's current data from Firestore
+            const hallSnapshot = await db.collection("halls").doc(id).get();
+
+            const hall = { id: hallSnapshot.id, ...hallSnapshot.data() };
+
+            // Render the update hall form with the current hall data
+            res.render("updatehall", { hall });
+        }
+        catch (err) {
+            return res.status(500).send("Error fetching hall data");
+        }
+    }
+    else if (req.method === 'PUT') {
+        try {
+            const { id } = req.params;
+            const { name, description,image, capacity, available } = req.body;
+
+            // Update the hall document in Firestore
+            await db.collection("halls").doc(id).update({
+                name,
+                description,
+                capacity,
+                image: image || "",
+                available,
+            });
+
+            // Redirect to the page displaying all halls
+            res.redirect("/seeallhalls");
+        }
+        catch (err) {
+            return res.status(500).send("Error updating hall");
+        }
+    }
+}
+
+exports.dashboard = (req, res) => {
+    try{
+        const { role } = req.params; // Get the role from route parameters
+        if (role === "admin") {
+            // Render admin dashboard
+            res.render("admin_dashboard");
+        } else if (role === "user") {
+            // Render user dashboard
+            res.render("user_dashboard");
+        } 
+        else {
+            // Handle unauthorized access or invalid role
+            res.status(403).send("Access denied");
+        }
+    }
+    catch(err){
+        return res.status(500).send("Error rendering dashboard");
+    }
+   
+
+    
+};

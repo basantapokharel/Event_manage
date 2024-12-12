@@ -1,5 +1,4 @@
-const hallModel = require("../models/halls.model")
-const bookingModel = require("../models/bookings.model")
+
 
 exports.hall_bookings = async (req, res) => {
 
@@ -343,5 +342,6 @@ exports.viewallbookingsuser = async (req, res) => {
         res.status(500).send("Error rendering view-bookings page");
     }
 };
+
 
 
