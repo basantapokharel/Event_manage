@@ -1,2 +1,4 @@
 __pycache__/
 .vscode/
+
+service_acc/service_account.json
