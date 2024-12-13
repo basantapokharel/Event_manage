@@ -1,54 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Hall Management</title>
-    <link rel="stylesheet" href="/css/user_dash.css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>User Dashboard - Event Booking System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans:wght@300&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Open Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #5c6bc0, #283593);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+        }
+
+        .navbar a {
+            color: white !important;
+        }
+
+        .navbar-nav a:hover {
+            color: #ff9800;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #1c1c1c;
+            color: white;
+            padding-top: 20px;
+            position: fixed;
+            top: 54px;
+            left: -250px;
+            /* Sidebar visible by default */
+            height: 100%;
+            padding-left: 15px;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            transition: background 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            background-color: #5c6bc0;
+            border-radius: 5px;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 20px;
+            flex-grow: 1;
+            text-align: center;
+            transition: margin-left 0.3s ease;
+            /* Smooth transition when sidebar toggles */
+        }
+
+        .content.shifted {
+            margin-left: 250px;
+            /* Shifts the content when sidebar is open */
+        }
+
+        .welcome-message {
+            font-family: 'Pacifico', cursive;
+            font-size: 3rem;
+            animation: fadeIn 3s ease-in-out;
+            color: #283593;
+        }
+
+        .background-image {
+            /* background-image: url('/public/images/img1.jpg'); */
+            /* Placeholder hall image */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 50px 0;
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        footer {
+            background-color: white;
+            color: #333;
+            padding: 10px;
+            /* Reduced padding */
+            text-align: center;
+            position: relative;
+            margin-top: 20px;
+            width: 100%;
+            min-height: 40px;
+            /* Ensures a consistent smaller height */
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 14px;
+            /* Optional: Reduce font size to match compact style */
+        }
+
+
+        /* Sidebar toggle button */
+        .sidebar-toggle-btn {
+            position: absolute;
+            top: 3px;
+            left: 15px;
+            z-index: 100;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        /* Navbar toggle button on the right */
+        .navbar-toggler {
+            border: none;
+            color: white;
+            margin-left: auto;
+            /* Push to the right */
+        }
+
+
+
+        @media (max-width: 991px) {
+            .navbar-toggler {
+                display: block !important;
+                /* Ensure navbar toggle button shows on smaller screens */
+            }
+
+            .content {
+                margin-left: 0;
+                /* Ensure content doesn't overlap the sidebar */
+            }
+        }
+
+        @media (min-width: 992px) {
+            .sidebar-toggle-btn {
+                display: block;
+            }
+        }
+    </style>
 </head>
+
 <body>
-    <header class="navbar">
-        <h1>Hall Management System</h1>
-        <nav>
-            <a href="/logout">Logout</a>
-        </nav>
-    </header>
-    <div class="dashboard-container">
-        <h2>Welcome, <%= userName %>!</h2>
-        <p>Select an action below:</p>
-        <div class="options">
-            <a href="/hall_bookings">
-                <div class="option-card">
-                    <i class="icon fas fa-calendar-check"></i>
-                    <div class="option-title">View Hall Details</div>
-                </div>
-            </a>
-            <a href="/viewuserBookings">
-                <div class="option-card">
-                    <i class="icon fas fa-eye"></i>
-                    <div class="option-title">View Your Bookings</div>
-                </div>
-            </a>
-            <a href="/book-now">
-                <div class="option-card">
-                    <i class="icon fas fa-plus-circle"></i>
-                    <div class="option-title">Book Now</div>
-                </div>
-            </a>
-            <!-- New link for viewing all bookings -->
-            <a href="/viewallbookings/user">
-                <div class="option-card">
-                    <i class="icon fas fa-list-alt"></i>
-                    <div class="option-title">View All Bookings</div>
-                </div>
-            </a>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <!-- Sidebar Hamburger Button on Left Top -->
+            <button class="btn sidebar-toggle-btn" id="sidebarToggle">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Navbar Items Hamburger on Right Top -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-house"></i> Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-info-circle"></i> About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-phone-alt"></i> Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i>
+                            Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar (Visible by default) -->
+    <div class="sidebar" id="sidebar">
+        <a href="/hall_bookings"><i class="fas fa-calendar-check"></i> View Hall Details</a>
+        <a href="/viewuserBookings"><i class="fas fa-eye"></i> View Your Bookings</a>
+        <a href="/book-now"><i class="fas fa-plus-circle"></i> Book Now</a>
+        <a href="/viewallbookings/user"><i class="fas fa-list-alt"></i> View All Bookings</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content" id="content">
+        <div class="background-image">
+            <h2 class="welcome-message">Welcome to the Event Booking System, <%= userName %>!</h2>
+            <p>Explore and manage your hall bookings with ease and elegance.</p>
         </div>
     </div>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2024 Hall Management System | All Rights Reserved</p>
+        <p>&copy; 2024 Event Booking System | All Rights Reserved</p>
     </footer>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap and jQuery JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Sidebar toggle functionality
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+
+        sidebarToggle.addEventListener('click', () => {
+            const isSidebarOpen = sidebar.style.left === '0px';
+            if (isSidebarOpen) {
+                sidebar.style.left = '-250px'; // Hide sidebar
+                content.classList.remove('shifted'); // Reset content margin
+            } else {
+                sidebar.style.left = '0px'; // Show sidebar
+                content.classList.add('shifted'); // Shift content
+            }
+        });
+    </script>
 </body>
+
 </html>

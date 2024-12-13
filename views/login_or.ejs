@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/login.style.css">
+</head>
+<body>
+    <div class="page-title">
+        <h1>Login</h1>
+    </div>
+    <div class="login-container">
+        <form action="/home" method="POST">
+            <input type="text" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <% if (typeof message !== 'undefined') { %>
+                <div class="error-message">
+                    <p><%= message %></p>
+                </div>
+            <% } %>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

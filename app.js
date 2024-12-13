@@ -19,12 +19,14 @@ app.set('view engine', 'ejs');
 // Set the path for views folder (Express defaults to './views')
 app.set('views', path.join(__dirname, 'views'));
 
-//for public folder
-app.use(express.static('public'));
+// Serve static files from the 'public' folder
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Middleware to parse incoming request bodies
 app.use(express.urlencoded({ extended: true }));  // For form data (application/x-www-form-urlencoded)
 app.use(express.json());  // For JSON data (application/json)
+
+
 
 
 //method-override

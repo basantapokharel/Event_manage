@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Hall Management</title>
+    <link rel="stylesheet" href="/css/user_dash.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body>
+    <header class="navbar">
+        <h1>Hall Management System</h1>
+        <nav>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <div class="dashboard-container">
+        <h2>Welcome, <%= userName %>!</h2>
+        <p>Select an action below:</p>
+        <div class="options">
+            <a href="/hall_bookings">
+                <div class="option-card">
+                    <i class="icon fas fa-calendar-check"></i>
+                    <div class="option-title">View Hall Details</div>
+                </div>
+            </a>
+            <a href="/viewuserBookings">
+                <div class="option-card">
+                    <i class="icon fas fa-eye"></i>
+                    <div class="option-title">View Your Bookings</div>
+                </div>
+            </a>
+            <a href="/book-now">
+                <div class="option-card">
+                    <i class="icon fas fa-plus-circle"></i>
+                    <div class="option-title">Book Now</div>
+                </div>
+            </a>
+            <!-- New link for viewing all bookings -->
+            <a href="/viewallbookings/user">
+                <div class="option-card">
+                    <i class="icon fas fa-list-alt"></i>
+                    <div class="option-title">View All Bookings</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 Hall Management System | All Rights Reserved</p>
+    </footer>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>

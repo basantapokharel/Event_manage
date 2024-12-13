@@ -13,6 +13,7 @@
     "@babel/preset-react": "^7.25.9",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
+    "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.1",
     "firebase": "^11.0.2",
     "firebase-admin": "^13.0.1",

@@ -37,7 +37,7 @@ exports.home =async (req, res) => {
             if(userDoc.role=="admin"){
                 return res.render("admin_dashboard");
             }else{
-                return res.render("user_dashboard",{userName});
+                return res.render("user_dashboard",{userName });
             }
         } else {
             // Password does not match
